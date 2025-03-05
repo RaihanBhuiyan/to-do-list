@@ -9,8 +9,10 @@ return new class extends Migration {
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // User relation
             $table->string('title');
-            $table->boolean('completed')->default(false);
+            $table->text('description')->nullable();
+            $table->boolean('is_completed')->default(false);
             $table->timestamps();
         });
     }
