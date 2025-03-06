@@ -32,7 +32,7 @@ This is a simple To-Do List application built with Laravel 12, VueJS 3, and MySQ
 ### Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/RaihanBhuiyan/to-do-list.git
 cd todo-list-app
 ```
 
