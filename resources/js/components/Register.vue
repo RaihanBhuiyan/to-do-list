@@ -70,7 +70,10 @@ export default {
           name: this.name,
           email: this.email,
           password: this.password,
+          password_confirmation: this.confirmPassword,
         });
+
+        // console.log(response);
 
         if (response.status === 201) {
           this.successMessage = 'Registration successful! You can now log in.';

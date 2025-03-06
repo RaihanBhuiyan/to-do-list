@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
 
 // Import components
 import Login from '../components/Login.vue';
@@ -40,7 +40,9 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.VITE_BASE_URL), // Update if necessary
+    // history: createWebHistory(import.meta.env.APP_URL), // Update if necessary
+    //history: createWebHashHistory(),
+    history: createWebHistory(),
     routes,
 });
 

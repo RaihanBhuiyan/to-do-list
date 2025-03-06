@@ -19,6 +19,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
+            // dd($request->all());
             return response()->json(['errors' => $validator->errors()]);
         }
 
@@ -28,7 +29,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json(['message' => 'User registered successfully']);
+        return response()->json(['message' => 'User registered successfully'], 201);
     }
 
     public function login(Request $request)

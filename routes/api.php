@@ -12,7 +12,6 @@ Route::get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Protected routes
 Route::prefix('tasks')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [TaskController::class, 'index']); // Retrieve all tasks
     Route::post('/', [TaskController::class, 'store']); // Create a task

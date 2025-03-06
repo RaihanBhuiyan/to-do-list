@@ -4,68 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the tasks for the authenticated user.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        $tasks = Auth::user()->tasks; // Fetch tasks only for the logged-in user
-        return response()->json($tasks);
+        // Fetch tasks for the authenticated user, including the description
+        return response()->json(Auth::user()->tasks);
     }
 
-    /**
-     * Store a newly created task.
-     */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
+        // Validate the input, including description
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string',  // Make sure description is validated
             'is_completed' => 'boolean',
         ]);
 
+        // Create the task for the authenticated user, including description
         $task = Auth::user()->tasks()->create($validated);
 
         return response()->json($task, 201);
     }
 
-    /**
-     * Display a specific task.
-     */
-    public function show(Task $task)
+    public function update(Request $request, $id): JsonResponse
     {
-        $this->authorize('view', $task);
-        return response()->json($task);
-    }
+        // Find the task and ensure it belongs to the authenticated user
+        $task = Task::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
 
-    /**
-     * Update an existing task.
-     */
-    public function update(Request $request, Task $task)
-    {
-        $this->authorize('update', $task);
-
-        $validated = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'is_completed' => 'boolean',
+        // Update task with the provided data, including description
+        $task->update([
+            'title' => $request->input('title', $task->title),  // Update title if provided
+            'description' => $request->input('description', $task->description),  // Update description if provided
+            'is_completed' => $request->boolean('is_completed', $task->is_completed),  // Update is_completed status
         ]);
 
-        $task->update($validated);
-
         return response()->json($task);
     }
 
-    /**
-     * Remove a task.
-     */
-    public function destroy(Task $task)
+    public function destroy($id): JsonResponse
     {
-        $this->authorize('delete', $task);
+        // Ensure the task belongs to the authenticated user before deleting
+        $task = Task::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+
+        // Delete the task
         $task->delete();
 
         return response()->json(['message' => 'Task deleted successfully']);
