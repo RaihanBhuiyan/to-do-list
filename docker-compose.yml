@@ -5,64 +5,29 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: backend_app
-    restart: unless-stopped
-    working_dir: /var/www
+    container_name: laravel_app
+    ports:
+      - "8000:8000"
     volumes:
-      - .:/var/www
+      - .:/var/www/html
+    networks:
+      - app-network
     depends_on:
       - db
-    networks:
-      - app_network
 
   db:
     image: mysql:8.0
     container_name: mysql_db
-    restart: unless-stopped
     environment:
-      MYSQL_DATABASE: todo_db
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: todo_list
       MYSQL_USER: user
-      MYSQL_PASSWORD: secret
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
     networks:
-      - app_network
-
-  nginx:
-    image: nginx:latest
-    container_name: nginx_server
-    restart: unless-stopped
-    ports:
-      - "8080:80"
-    volumes:
-      - .:/var/www
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - app
-    networks:
-      - app_network
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    restart: unless-stopped
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "8081:80"
-    depends_on:
-      - db
-    networks:
-      - app_network
-
-volumes:
-  db_data:
+      - app-network
 
 networks:
-  app_network:
+  app-network:
     driver: bridge

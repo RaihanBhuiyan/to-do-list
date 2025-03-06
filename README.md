@@ -207,7 +207,7 @@ Make sure your production server meets the following requirements:
 Clone the project to your server:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/RaihanBhuiyan/to-do-list.git
 cd todo-list-app
 ```
 
@@ -261,7 +261,27 @@ php artisan serve --host=0.0.0.0 --port=80
 You can now access the app in the browser.
 
 ---
+10. Docker Setup
 
+To run the application using Docker, follow these steps:
+
+
+Run the following command to build and start the Docker containers:
+
+```bash
+docker-compose up -d
+```
+
+To run Artisan commands inside the Docker container, use:
+```bash
+docker-compose exec app php artisan <command>
+docker-compose exec app php artisan migrate
+```
+Rebuild the Containers
+```bash
+docker-compose down --rmi all
+docker-compose up -d
+```
 ## Conclusion
 
 This app allows users to manage tasks easily with features like adding, editing, deleting, and marking tasks as completed. It uses Laravel Sanctum for secure authentication, VueJS for a dynamic frontend, and MySQL/PostgreSQL for the database. Automated tests ensure that the core functionality is working as expected.
